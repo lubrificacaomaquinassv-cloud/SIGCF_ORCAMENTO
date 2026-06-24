@@ -2,7 +2,7 @@ import streamlit as st
 
 from sigcf_auth import BG_URL, link_instagram, logo_html
 
-# Adicionamos a tag <style> no início e </style> no fim da variável de texto para o navegador entender o design
+# Adicionamos a tag <style> no início e </style> no fim para o Streamlit processar visualmente e ocultar o texto
 SIGCF_CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&display=swap');
@@ -61,7 +61,6 @@ div[data-testid="stMetricValue"]{color:#8ec486!important;font-family:'Barlow Con
 </style>
 """
 
-
 MODULOS_ORCAMENTO = [
     {"id": "lancamento", "nome": "Novo lancamento", "icone": "📝", "ativo": True},
     {"id": "consulta", "nome": "Consultar lancamentos", "icone": "🔍", "ativo": True},
@@ -83,4 +82,24 @@ def render_header(titulo: str, subtitulo: str) -> None:
     with col_titulo:
         st.title(titulo)
         st.caption(subtitulo)
-        st.markdown(f'<p style
+        st.markdown(f'<p style="margin:4px 0 0;font-size:13px;">{link_instagram()}</p>', unsafe_allow_html=True)
+    with col_btn:
+        if st.button("Atualizar", use_container_width=True, key="btn_atualizar_topo"):
+            st.cache_data.clear()
+            st.rerun()
+
+
+def render_modulos() -> None:
+    st.markdown('<div class="sec">Modulos SIGCF Orcamento</div>', unsafe_allow_html=True)
+    cols = st.columns(4)
+    for index, modulo in enumerate(MODULOS_ORCAMENTO):
+        cls = "active" if modulo["ativo"] else "soon"
+        tag = "DISPONIVEL" if modulo["ativo"] else "EM BREVE"
+        with cols[index % 4]:
+            st.markdown(
+                f'<div class="hub-card {cls}">'
+                f'<div class="ico">{modulo["icone"]}</div>'
+                f'<div class="tit">{modulo["nome"]}</div>'
+                f'<span class="tag">{tag}</span></div>',
+                unsafe_allow_html=True,
+            )
