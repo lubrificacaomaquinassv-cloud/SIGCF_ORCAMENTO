@@ -1,0 +1,6 @@
+data/lancamentos.csv
+data/uploads/
+uploaded_budget.xlsb
+__pycache__/
+*.pyc
+.streamlit/secrets.toml
